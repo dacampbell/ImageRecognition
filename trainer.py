@@ -8,15 +8,21 @@ This file is used to train the neural network for the project
 
 from pybrain.structure import FeedForwardNetwork, LinearLayer, SigmoidLayer, \
                               FullConnection
+from pybrain.datasets import ClassificationDataSet
+from pybrain.supervised.trainers import BackpropTrainer
+
+
 import cPickle
 import os.path as path
+import numpy as np
 
 # Create the neural network and the layers
+print 'Initializing the Neural Network'
 network = FeedForwardNetwork()
-inLayer = LinearLayer(1024)
-hiddenLayer1 = SigmoidLayer(1024*2)
-hiddenLayer2 = SigmoidLayer(1024*3)
-hiddenLayer3 = SigmoidLayer(1024*2)
+inLayer = LinearLayer(3072)
+hiddenLayer1 = SigmoidLayer(1000)
+hiddenLayer2 = SigmoidLayer(500)
+hiddenLayer3 = SigmoidLayer(250)
 outLayer = LinearLayer(10)
 
 # Add the layers to the neural network
@@ -40,5 +46,29 @@ network.addConnection(hidden3_to_out)
 # Neural network performs internal initialization
 network.sortModules()
 
-# Load in CIFAR10 dataset using cPcikle
-dataFile1 = open(path.join('cifar-10-batches-py', '))
+# Load in CIFAR10 dataset using cPcikle and conver to NumPy array
+dataFile1 = open(path.join('cifar-10-batches-py', 'data_batch_1'), 'rd')
+data = cPickle.load(dataFile1)
+images = np.array(data['data'])
+labels = np.array(data['labels'])
+
+# Construct the supervised data set for learning
+print 'Constructing the Data Set'
+dataSet = ClassificationDataSet(3072, 1, nb_classes = 10)
+
+for index in range(0, labels.size):
+    dataSet.addSample(images[index], labels[index])
+dataSet._convertToOneOfMany();
+    
+
+# Train the neural network
+print 'Training the Neural Network'
+trainer = BackpropTrainer(network, dataset = dataSet, momentum = 0.1, verbose = True, weightdecay = 0.01)
+trainer.trainEpochs(5)
+
+# Save the neural network to a file for later use
+print 'Saving to File'
+networkFile = open('trainedNet1.cpkl', 'w')
+cPickle.dump(network, networkFile)
+
+print 'Finished Training Network'
