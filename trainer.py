@@ -63,7 +63,7 @@ data5 = cPickle.load(dataFile5)
 images = np.append(data1['data'], [data2['data'], data3['data'], data4['data'], data5['data']])
 labels = np.append(data1['labels'], [data2['labels'], data3['labels'], data4['labels'], data5['labels']])
 
-# Construct the supervised data set for learning
+# Construct the classification data set for learning
 print 'Constructing the Data Set'
 dataSet = ClassificationDataSet(3072, 1, nb_classes = 10)
 
