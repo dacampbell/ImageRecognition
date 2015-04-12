@@ -47,11 +47,11 @@ network.addConnection(hidden3_to_out)
 network.sortModules()
 
 # Load in CIFAR10 dataset using cPcikle and conver to NumPy array
-dataFile1 = open(path.join('cifar-10-batches-py', 'data_batch_1'), 'rd')
-dataFile2 = open(path.join('cifar-10-batches-py', 'data_batch_2'), 'rd')
-dataFile3 = open(path.join('cifar-10-batches-py', 'data_batch_3'), 'rd')
-dataFile4 = open(path.join('cifar-10-batches-py', 'data_batch_4'), 'rd')
-dataFile5 = open(path.join('cifar-10-batches-py', 'data_batch_5'), 'rd')
+dataFile1 = open(path.join('cifar-10-batches-py', 'data_batch_1'), 'r')
+dataFile2 = open(path.join('cifar-10-batches-py', 'data_batch_2'), 'r')
+dataFile3 = open(path.join('cifar-10-batches-py', 'data_batch_3'), 'r')
+dataFile4 = open(path.join('cifar-10-batches-py', 'data_batch_4'), 'r')
+dataFile5 = open(path.join('cifar-10-batches-py', 'data_batch_5'), 'r')
 
 # Unpack the dataset
 data1 = cPickle.load(dataFile1)
@@ -59,6 +59,12 @@ data2 = cPickle.load(dataFile2)
 data3 = cPickle.load(dataFile3)
 data4 = cPickle.load(dataFile4)
 data5 = cPickle.load(dataFile5)
+
+dataFile1.close()
+dataFile2.close()
+dataFile3.close()
+dataFile4.close()
+dataFile5.close()
 
 images = np.append(data1['data'], [data2['data'], data3['data'], data4['data'], data5['data']])
 labels = np.append(data1['labels'], [data2['labels'], data3['labels'], data4['labels'], data5['labels']])
@@ -81,5 +87,6 @@ trainer.trainEpochs(5)
 print 'Saving to File'
 networkFile = open('trainedNet1.cpkl', 'w')
 cPickle.dump(network, networkFile)
+network
 
 print 'Finished Training Network'

@@ -15,14 +15,17 @@ import os.path as path
 
 # Loads the neural network from a file
 print "Loading Network File"
-networkFile = open('trainedNet1.cpkl', 'rd')
+networkFile = open('trainedNet1.cpkl', 'r')
 network = cPickle.load(networkFile)
+networkFile.close()
 
 # Load in the data
-dataFile1 = open(path.join('cifar-10-batches-py', 'data_batch_2'), 'rd')
-data = cPickle.load(dataFile1)
+dataFile = open(path.join('cifar-10-batches-py', 'test_batch'), 'r')
+data = cPickle.load(dataFile)
 images = np.array(data['data'])
 labels = np.array(data['labels'])
+
+dataFile.close()
 
 # Construct the classification data set for evaluation
 print 'Constructing the Data Set'
