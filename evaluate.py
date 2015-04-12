@@ -8,6 +8,7 @@ This file is used to evaluate the generated neural network on test data
 
 from pybrain.datasets import ClassificationDataSet
 from pybrain.supervised.trainers import BackpropTrainer
+from pybrain.utilities import percentError
 
 import cPickle
 import numpy as np
@@ -41,6 +42,7 @@ trainer = BackpropTrainer(network)
 
 # Evaluate the network against the test data
 print 'Testing the data'
-percentError = 100 * trainer.testOnData(dataset = dataSet)
-print 'Data had', percentError, 'error'
+error = percentError( trainer.testOnClassData(
+           dataset=dataSet ), dataSet['class'] )
+print 'Data had', error, 'error'
 
